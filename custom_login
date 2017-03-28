@@ -1,1 +1,20 @@
+#!/bin/bash
+
+#load ssh keys
 ssh-add -A 2>/dev/null;
+
+#read pass
+home_pass=$(<.secrets/home_pass.secret)
+work_pass=$(<.secrets/work_pass.secret)
+
+umount /Volumes/home_edward
+mkdir /Volumes/home_edward
+mount_afp 'afp://edward:'"$home_pass"'@nas.home.theemm.com/Edward' /Volumes/home_edward
+
+umount /Volumes/home_public
+mkdir /Volumes/home_public
+mount_afp 'afp://edward:'"$home_pass"'@nas.home.theemm.com/Public' /Volumes/home_public
+
+umount /Volumes/Tech
+mkdir /Volumes/Tech
+mount_afp 'afp://emeshuris:'"$work_pass"'@colfspr01/Tech' /Volumes/Tech
