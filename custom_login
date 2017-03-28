@@ -6,15 +6,54 @@ ssh-add -A 2>/dev/null;
 #read pass
 home_pass=$(<.secrets/home_pass.secret)
 work_pass=$(<.secrets/work_pass.secret)
+location='work'
 
-umount /Volumes/home_edward
-mkdir /Volumes/home_edward
-mount_afp 'afp://edward:'"$home_pass"'@nas.home.theemm.com/Edward' /Volumes/home_edward
+if
+  mount | grep /Volumes/home_edward > /dev/null
+then
+  echo 'home_edward already mounted'
+else
+  umount /Volumes/home_edward
+  mkdir -p /Volumes/home_edward
+  mount_afp 'afp://edward:'"$home_pass"'@nas.home.theemm.com/Edward' /Volumes/home_edward
+fi
 
-umount /Volumes/home_public
-mkdir /Volumes/home_public
-mount_afp 'afp://edward:'"$home_pass"'@nas.home.theemm.com/Public' /Volumes/home_public
+if
+  mount | grep /Volumes/home_public > /dev/null
+then
+  echo 'home_public already mounted'
+else
+  umount /Volumes/home_public
+  mkdir -p /Volumes/home_public
+  mount_afp 'afp://edward:'"$home_pass"'@nas.home.theemm.com/Public' /Volumes/home_public
+fi
 
-umount /Volumes/Tech
-mkdir /Volumes/Tech
-mount_afp 'afp://emeshuris:'"$work_pass"'@colfspr01/Tech' /Volumes/Tech
+if
+  mount | grep /Volumes/Tech > /dev/null
+then
+  echo 'tech already mounted'
+else
+  umount /Volumes/Tech
+  mkdir -p /Volumes/Tech
+  mount_afp 'afp://emeshuris:'"$work_pass"'@colfspr01/Tech' /Volumes/Tech
+fi
+
+if
+  mount | grep /Volumes/home_edward > /dev/null
+then
+    location='home'
+else
+    location='work'
+fi
+
+echo $location
+
+rm -rf '~/.boxes'
+
+if
+  [ "$location" = 'home' ]
+then
+  ln -s /Volumes/home_edward/boxes ~/.boxes
+else
+  ln -s /Volumes/Tech/vagrant ~/.boxes
+fi
