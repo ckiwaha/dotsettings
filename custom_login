@@ -4,8 +4,11 @@
 ssh-add -A 2>/dev/null;
 
 #read pass
-home_pass=$(<.secrets/home_pass.secret)
-work_pass=$(<.secrets/work_pass.secret)
+rm -rf ~/.secrets
+ln -s ~/git/secrets ~/.secrets
+
+home_pass=$(<~/.secrets/home_pass.secret)
+work_pass=$(<~/.secrets/work_pass.secret)
 location='work'
 
 if
@@ -35,7 +38,7 @@ then
 else
   umount /Volumes/Tech
   mkdir -p /Volumes/Tech
-  mount_afp 'afp://emeshuris:'"$work_pass"'@colfspr01/Tech' /Volumes/Tech
+  mount_smbfs '//emeshuris:'"$work_pass"'@colfsrp01/Tech' /Volumes/Tech
 fi
 
 if
@@ -48,7 +51,7 @@ fi
 
 echo $location
 
-rm -rf '~/.boxes'
+rm -rf ~/.boxes
 
 if
   [ "$location" = 'home' ]

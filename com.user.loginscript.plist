@@ -1,0 +1,10 @@
+<plist version="1.0">
+ <dict>
+   <key>Label</key>
+   <string>customlogin-daemon</string>
+   <key>RunAtLoad</key>
+   <true />
+   <key>Program</key>
+   <string>/Users/emeshuris/git/dotsettings/custom_login</string>
+  </dict>
+</plist>
