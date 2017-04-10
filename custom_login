@@ -32,6 +32,16 @@ else
 fi
 
 if
+  mount | grep /Volumes/tm_fd_new > /dev/null
+then
+  echo 'tm_fd_new already mounted'
+else
+  umount /Volumes/tm_fd_new
+  mkdir -p /Volumes/tm_fd_new
+  mount_afp 'afp://edward:'"$home_pass"'@nas.home.theemm.com/tm_fd_new' /Volumes/tm_fd_new
+fi
+
+if
   mount | grep /Volumes/Tech > /dev/null
 then
   echo 'tech already mounted'
